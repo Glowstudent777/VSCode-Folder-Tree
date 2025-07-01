@@ -30,4 +30,4 @@ Before creating an issue, please ensure that it hasn't already been reported/sug
 ## License
 
 This project is licensed under the terms of the
-[MIT license](/LICENSE).
+[MIT license](https://github.com/Glowstudent777/VSCode-Folder-Tree/blob/main/LICENSE).

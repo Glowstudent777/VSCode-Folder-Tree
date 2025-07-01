@@ -1,6 +1,11 @@
 {
   "name": "project-trees",
   "displayName": "Project Trees",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Glowstudent777/VSCode-Folder-Tree.git"
+  },
+  "publisher": "Glowstudent",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -59,6 +64,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
+    "vscode:package": "pnpm run compile && pnpx vsce package",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
