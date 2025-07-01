@@ -1,6 +1,6 @@
 {
-  "name": "project-map",
-  "displayName": "Project Map",
+  "name": "project-trees",
+  "displayName": "Project Trees",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -14,10 +14,48 @@
   "contributes": {
     "commands": [
       {
-        "command": "project-map.showFolderTree",
-        "title": "Show Folder Tree"
+        "command": "project-trees.showProjectTree",
+        "title": "Show Project Tree"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Project Trees",
+      "properties": {
+        "projectTree.rootFolderName": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show the root folder name in the project tree"
+        },
+        "projectTree.ignoreFolders": {
+          "type": "array",
+          "default": [
+            "node_modules",
+            "dist",
+            "out",
+            ".git",
+            ".vscode",
+            ".vs",
+            "build"
+          ],
+          "description": "Folders to ignore in the project tree"
+        },
+        "projectTree.collapsedFolders": {
+          "type": "array",
+          "default": [
+            "external",
+            "vendor",
+            "libs"
+          ],
+          "description": "Folders to collapse in the project tree"
+        },
+        "projectTree.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug mode for the project tree"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",

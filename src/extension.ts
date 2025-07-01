@@ -2,20 +2,36 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 
-const ignoreFolders = [
-  "node_modules",
-  "dist",
-  "out",
-  ".git",
-  ".vscode",
-  ".vs",
-  "build",
-];
+function getConfiguration() {
+  const config = vscode.workspace.getConfiguration("projectTree");
+  const showRootFolderName = config.get<boolean>("rootFolderName", true);
+  const ignoreFolders = config.get<string[]>("ignoreFolders", [
+    "node_modules",
+    "dist",
+    "out",
+    ".git",
+    ".vscode",
+    ".vs",
+    "build",
+  ]);
+  const collapsedFolders = config.get<string[]>("collapsedFolders", [
+    "external",
+    "vendor",
+    "libs",
+  ]);
+  const isDebug = config.get<boolean>("debug", false);
 
-const collapsedFolders = ["external", "vendor", "libs"];
+  return {
+    showRootFolderName,
+    ignoreFolders,
+    collapsedFolders,
+    isDebug,
+  };
+}
 
 function getFolderTree(dirPath: string, prefix: string = ""): string {
   let entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  const { ignoreFolders, collapsedFolders } = getConfiguration();
 
   const filteredEntries = entries.filter((entry) => {
     return !ignoreFolders.includes(entry.name);
@@ -53,7 +69,7 @@ function getFolderTree(dirPath: string, prefix: string = ""): string {
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
-    "project-map.showFolderTree",
+    "project-trees.showProjectTree",
     async () => {
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders || workspaceFolders.length === 0) {
@@ -61,15 +77,34 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      const { showRootFolderName, ignoreFolders, collapsedFolders, isDebug } =
+        getConfiguration();
+
       const rootPath = workspaceFolders[0].uri.fsPath;
       const rootFolderName = path.basename(rootPath);
 
       let treeString = getFolderTree(rootPath);
-      treeString = `${rootFolderName}\n` + treeString;
+      if (showRootFolderName) {
+        treeString = `${rootFolderName}\n${treeString}`;
+      }
 
-      const outputChannel = vscode.window.createOutputChannel("Folder Tree");
+      const outputChannel = vscode.window.createOutputChannel("Project Tree");
       outputChannel.show();
       outputChannel.appendLine(treeString);
+
+      if (isDebug) {
+        outputChannel.appendLine("\n[DEBUG] Configuration:");
+        outputChannel.appendLine(
+          `Show Root Folder Name: ${showRootFolderName}`
+        );
+        outputChannel.appendLine(
+          `Ignore Folders: ${JSON.stringify(ignoreFolders)}`
+        );
+        outputChannel.appendLine(
+          `Collapsed Folders: ${JSON.stringify(collapsedFolders)}`
+        );
+        outputChannel.appendLine(`Root Path: ${rootPath} (${rootFolderName})`);
+      }
 
       vscode.window.showInformationMessage("Folder structure displayed.");
     }
