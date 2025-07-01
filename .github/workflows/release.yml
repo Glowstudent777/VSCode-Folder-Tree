@@ -10,19 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clean dependencies
+        run: |
+          rm -rf node_modules
+          rm -f pnpm-lock.yaml
+
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "22"
+          node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
+
+      - name: Install vsce
+        run: pnpm install -g vsce
 
       - name: Build the extension
-        run: npm run compile
+        run: pnpm run compile
 
       - name: Package the extension
         run: vsce package
