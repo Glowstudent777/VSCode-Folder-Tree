@@ -48,8 +48,7 @@
           "default": "${project}-tree",
           "pattern": "^(\\$\\{project\\}|[a-zA-Z0-9-_])+$",
           "patternErrorMessage": "The export name can only contain alphanumeric characters, dashes, and underscores.",
-          "markdownDescription": "The name of the exported project tree file. Use `${project}` to include the workspace folder name. For example, `${project}-tree` will result in `MyProject-tree.txt` if the workspace folder is named `MyProject`.",
-          "description": "The name of the exported project tree file"
+          "markdownDescription": "The name of the exported project tree file. Use `${project}` to include the workspace folder name. For example, `${project}-tree` will result in `MyProject-tree.txt` if the workspace folder is named `MyProject`."
         },
         "projectTree.ignoreFolders": {
           "type": "array",

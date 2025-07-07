@@ -11,17 +11,20 @@ A Visual Studio Code extension that generates clean, visual representations of y
 - **Smart Filtering**: Automatically ignores common build/dependency folders (node_modules, dist, .git, etc.)
 - **Customizable Display**: Configure which folders to show, hide, or collapse
 - **Debug Mode**: Detailed logging for troubleshooting and configuration verification
+- **Export Options**: Save the generated tree to a file with a customizable name
 - **Output Channel Integration**: Results displayed in VS Code's output panel for easy copying
 
 ## 📦 Installation
 
 ### From VS Code Marketplace (Recommended)
+
 1. Open VS Code
 2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
 3. Search for "Project Trees"
 4. Click Install
 
 ### Manual Installation from VSIX
+
 1. Download the latest `.vsix` file from the [releases page](https://github.com/Glowstudent777/VSCode-Folder-Tree/releases)
 2. Open VS Code
 3. Open Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
@@ -31,23 +34,28 @@ A Visual Studio Code extension that generates clean, visual representations of y
 ## 🛠️ Development Setup
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [pnpm](https://pnpm.io/) package manager
 - [VS Code](https://code.visualstudio.com/)
 
 ### Getting Started
+
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Glowstudent777/VSCode-Folder-Tree.git
    cd VSCode-Folder-Tree
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Compile the extension**
+
    ```bash
    pnpm run compile
    ```
@@ -57,6 +65,7 @@ A Visual Studio Code extension that generates clean, visual representations of y
    - Or use the "Run Extension" configuration in the Debug panel
 
 ### Available Scripts
+
 - `pnpm run compile` - Compile TypeScript to JavaScript
 - `pnpm run watch` - Watch for changes and auto-compile
 - `pnpm run lint` - Run ESLint on source files
@@ -67,10 +76,14 @@ A Visual Studio Code extension that generates clean, visual representations of y
 
 1. Open any folder/workspace in VS Code
 2. Open Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
-3. Run the command: `Show Project Tree`
-4. View the generated tree in the "Project Tree" output channel
+3. Run the command: `Project Trees: Generate Project Tree`
+4. Select the output method:
+   - **Output Channel**: The tree will be displayed in the "Project Tree" output channel
+   - **File Export**: The tree will be saved to a file in the workspace root
+   - **Clipboard**: The tree will be copied to your clipboard
 
 ### Example Output
+
 ```
 my-project
 ├── src
@@ -89,27 +102,39 @@ my-project
 This extension contributes the following settings that can be configured in your VS Code settings:
 
 ### `projectTree.rootFolderName`
+
 - **Type**: `boolean`
 - **Default**: `true`
 - **Description**: Whether to show the root folder name in the project tree
 
 ### `projectTree.ignoreFolders`
+
 - **Type**: `array`
 - **Default**: `["node_modules", "dist", "out", ".git", ".vscode", ".vs", "build"]`
 - **Description**: Folders to ignore when generating the project tree
 
 ### `projectTree.collapsedFolders`
+
 - **Type**: `array`
 - **Default**: `["external", "vendor", "libs"]`
 - **Description**: Folders to collapse (show name only, not contents) in the project tree
 
+### `projectTree.exportName`
+
+- **Type**: `string`
+- **Default**: `"${project}-tree"`
+- **Description**: The name of the exported project tree file. Use `${project}` to include the workspace folder name. For example, `${project}-tree` will result in `MyProject-tree.txt` if the workspace folder is named `MyProject`.
+
 ### `projectTree.debug`
+
 - **Type**: `boolean`
 - **Default**: `false`
 - **Description**: Enable debug mode to show configuration details in output
 
 ### Example Configuration
+
 Add to your VS Code `settings.json`:
+
 ```json
 {
   "projectTree.rootFolderName": true,
@@ -120,10 +145,7 @@ Add to your VS Code `settings.json`:
     "coverage",
     "build"
   ],
-  "projectTree.collapsedFolders": [
-    "vendor",
-    "external"
-  ],
+  "projectTree.collapsedFolders": ["vendor", "external"],
   "projectTree.debug": false
 }
 ```
@@ -131,17 +153,21 @@ Add to your VS Code `settings.json`:
 ## 🔧 Building Your Own Install File
 
 ### Creating a VSIX Package
+
 1. **Ensure you have vsce installed globally**
+
    ```bash
    npm install -g @vscode/vsce
    ```
 
 2. **Build the extension**
+
    ```bash
    pnpm run compile
    ```
 
 3. **Create the VSIX package**
+
    ```bash
    pnpm run vscode:package
    ```
@@ -154,6 +180,7 @@ Add to your VS Code `settings.json`:
    ```
 
 ### Publishing to Marketplace (Maintainers Only)
+
 1. **Get a Personal Access Token** from [Azure DevOps](https://dev.azure.com/)
 2. **Login to vsce**
    ```bash
@@ -167,11 +194,13 @@ Add to your VS Code `settings.json`:
 ## 🧪 Testing
 
 Run the test suite:
+
 ```bash
 pnpm run test
 ```
 
 The extension includes:
+
 - Unit tests for core functionality
 - Integration tests with VS Code API
 - Linting with ESLint and TypeScript compiler checks
@@ -179,6 +208,7 @@ The extension includes:
 ## 📝 Release Notes
 
 ### 0.0.1 (Current)
+
 - Initial release
 - Basic folder tree generation
 - Configurable ignore and collapse settings
@@ -211,6 +241,7 @@ We welcome contributions! Please follow these steps:
 7. **Open a Pull Request**
 
 ### Development Guidelines
+
 - Follow the existing code style
 - Add tests for new functionality
 - Update documentation as needed
@@ -223,6 +254,7 @@ We welcome contributions! Please follow these steps:
 - **Discussions**: [GitHub Discussions](https://github.com/Glowstudent777/VSCode-Folder-Tree/discussions)
 
 Before creating an issue, please:
+
 - Check if the issue already exists
 - Include VS Code version and extension version
 - Provide steps to reproduce the problem
