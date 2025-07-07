@@ -21,11 +21,14 @@ function getConfiguration() {
   ]);
   const isDebug = config.get<boolean>("debug", false);
 
+  const projectName = config.get<string>("exportName", "${project}-tree");
+
   return {
     showRootFolderName,
     ignoreFolders,
     collapsedFolders,
     isDebug,
+    projectName,
   };
 }
 
@@ -77,8 +80,13 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      const { showRootFolderName, ignoreFolders, collapsedFolders, isDebug } =
-        getConfiguration();
+      const {
+        showRootFolderName,
+        ignoreFolders,
+        collapsedFolders,
+        projectName,
+        isDebug,
+      } = getConfiguration();
 
       const rootPath = workspaceFolders[0].uri.fsPath;
       const rootFolderName = path.basename(rootPath);
@@ -88,25 +96,77 @@ export function activate(context: vscode.ExtensionContext) {
         treeString = `${rootFolderName}\n${treeString}`;
       }
 
-      const outputChannel = vscode.window.createOutputChannel("Project Tree");
-      outputChannel.show();
-      outputChannel.appendLine(treeString);
+      const action = await vscode.window.showQuickPick(
+        [
+          {
+            label: "Copy to Clipboard",
+            description: "Copy the project tree structure to the clipboard",
+          },
+          {
+            label: "Save to File",
+            description: "Save the project tree structure to a file",
+          },
+          {
+            label: "Show in Output",
+            description:
+              "Show the project tree structure in the output channel",
+          },
+        ],
+        {
+          placeHolder: "Choose an action for the project tree",
+        }
+      );
 
-      if (isDebug) {
-        outputChannel.appendLine("\n[DEBUG] Configuration:");
-        outputChannel.appendLine(
-          `Show Root Folder Name: ${showRootFolderName}`
-        );
-        outputChannel.appendLine(
-          `Ignore Folders: ${JSON.stringify(ignoreFolders)}`
-        );
-        outputChannel.appendLine(
-          `Collapsed Folders: ${JSON.stringify(collapsedFolders)}`
-        );
-        outputChannel.appendLine(`Root Path: ${rootPath} (${rootFolderName})`);
+      switch (action?.label) {
+        case "Copy to Clipboard":
+          vscode.env.clipboard.writeText(treeString);
+          vscode.window.showInformationMessage(
+            "Project Tree copied to clipboard."
+          );
+          break;
+        case "Save to File":
+          const fileUri = await vscode.window.showSaveDialog({
+            defaultUri: vscode.Uri.file(
+              path.join(rootPath, `${projectName ?? "ProjectTree"}.txt`)
+            ),
+            filters: {
+              Text: ["txt"],
+            },
+          });
+          if (fileUri) {
+            fs.writeFileSync(fileUri.fsPath, treeString);
+            vscode.window.showInformationMessage(
+              `Project Tree saved to ${fileUri.fsPath}`
+            );
+          }
+          break;
+        case "Show in Output":
+          const outputChannel =
+            vscode.window.createOutputChannel("Project Tree");
+          outputChannel.show();
+          outputChannel.appendLine(treeString);
+
+          if (isDebug) {
+            outputChannel.appendLine("\n[DEBUG] Configuration:");
+            outputChannel.appendLine(
+              `Show Root Folder Name: ${showRootFolderName}`
+            );
+            outputChannel.appendLine(
+              `Ignore Folders: ${JSON.stringify(ignoreFolders)}`
+            );
+            outputChannel.appendLine(
+              `Collapsed Folders: ${JSON.stringify(collapsedFolders)}`
+            );
+            outputChannel.appendLine(
+              `Root Path: ${rootPath} (${rootFolderName})`
+            );
+          }
+          break;
+        default:
+          return;
       }
 
-      vscode.window.showInformationMessage("Folder structure displayed.");
+      vscode.window.showInformationMessage("Project Tree Generated.");
     }
   );
 

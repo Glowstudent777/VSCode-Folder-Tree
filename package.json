@@ -12,15 +12,26 @@
     "vscode": "^1.101.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "projectTree",
+          "name": "Project Tree",
+          "icon": ""
+        }
+      ]
+    },
     "commands": [
       {
         "command": "project-trees.showProjectTree",
-        "title": "Show Project Tree"
+        "title": "Generate Project Tree",
+        "category": "Project Trees"
       }
     ],
     "configuration": {
@@ -31,6 +42,14 @@
           "type": "boolean",
           "default": true,
           "description": "Whether to show the root folder name in the project tree"
+        },
+        "projectTree.exportName": {
+          "type": "string",
+          "default": "${project}-tree",
+          "pattern": "^(\\$\\{project\\}|[a-zA-Z0-9-_])+$",
+          "patternErrorMessage": "The export name can only contain alphanumeric characters, dashes, and underscores.",
+          "markdownDescription": "The name of the exported project tree file. Use `${project}` to include the workspace folder name. For example, `${project}-tree` will result in `MyProject-tree.txt` if the workspace folder is named `MyProject`.",
+          "description": "The name of the exported project tree file"
         },
         "projectTree.ignoreFolders": {
           "type": "array",
