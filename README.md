@@ -1,6 +1,6 @@
 # Project Trees - VS Code Extension
 
-[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/Glowstudent777/VSCode-Folder-Tree)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/Glowstudent777/VSCode-Folder-Tree)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 A Visual Studio Code extension that generates clean, visual representations of your project's folder structure. Perfect for documentation, code reviews, and understanding project organization at a glance.
