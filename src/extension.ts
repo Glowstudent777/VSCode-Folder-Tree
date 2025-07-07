@@ -21,7 +21,10 @@ function getConfiguration() {
   ]);
   const isDebug = config.get<boolean>("debug", false);
 
-  const projectName = config.get<string>("exportName", "${project}-tree");
+  let projectName = config.get<string>("exportName", "${project}-tree");
+  if (projectName.endsWith(".txt")) {
+    projectName = projectName.slice(0, -4);
+  }
 
   return {
     showRootFolderName,
